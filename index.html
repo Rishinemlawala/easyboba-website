@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy boba adajan</title>
+    <link rel="icon" href="logo.png" type="image/x-icon">
+    <!-- Use Tailwind CSS for styling and Font Awesome for icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            /* Fix horizontal scrolling on mobile */
+            overflow-x: hidden;
+            /* Improved mobile centering */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        /* Full-screen background container */
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1s ease-in-out; /* Smooth transition for background changes */
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+        /* Custom styles for the welcome modal */
+        .welcome-modal-container {
+            display: none; /* start hidden */
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .welcome-modal-content {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            max-width: 90%;
+            width: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 0.5rem;
+            right: 1rem;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Mobile-specific adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Background Container -->
+    <div class="background-container" id="bg-container"></div>
+    <div class="overlay"></div>
+
+    <!-- Content Card: Centered on the screen with a frosted glass effect -->
+    <div class="relative z-10 bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm rounded-2xl shadow-xl border border-white border-opacity-20 w-full max-w-md text-center p-6 md:p-12 mx-4 px-6">
+
+        <!-- Cafe Title -->
+        <h1 class="text-white text-3xl md:text-5xl font-bold mb-6 md:mb-8 tracking-wide">Easy Boba</h1>
+        <h3 class="text-white text-lg md:text-2xl font-semibold mb-4 md:mb-6">Adajan, Surat</h3>
+        <p class="text-white text-base md:text-xl font-light mb-8 md:mb-12">Enjoy the finest bubble tea and delicious treats.</p>
+
+        <!-- Social Media/Links Container -->
+        <div class="flex justify-center space-x-10 md:space-x-12">
+            <!-- Instagram Icon -->
+            <a href="https://www.instagram.com/easyboba_adajan.surat?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="flex flex-col items-center text-white text-lg hover:scale-110 transition-transform duration-300">
+                <i class="fa-brands fa-instagram text-3xl md:text-4xl mb-2"></i>
+                <span class="text-xs md:text-sm font-semibold">Instagram</span>
+            </a>
+
+            <!-- Menu Icon -->
+            <a href="Menu.pdf" target="_blank" class="flex flex-col items-center text-white text-lg hover:scale-110 transition-transform duration-300">
+                <i class="fa-solid fa-mug-hot text-3xl md:text-4xl mb-2"></i>
+                <span class="text-xs md:text-sm font-semibold">Menu</span>
+            </a>
+
+            <!-- Review Icon -->
+            <a href="https://share.google/wyAA0ITo8gXdW7NZX" class="flex flex-col items-center text-white text-lg hover:scale-110 transition-transform duration-300">
+                <i class="fa-solid fa-star text-3xl md:text-4xl mb-2"></i>
+                <span class="text-xs md:text-sm font-semibold">Reviews</span>
+            </a>
+            <!-- Offers Icon -->
+            <a href="javascript:void(0)" onclick="showOffersModal()" class="flex flex-col items-center text-white text-lg hover:scale-110 transition-transform duration-300">
+                <i class="fa-solid fa-gift text-3xl md:text-4xl mb-2"></i>
+                <span class="text-xs md:text-sm font-semibold">Offers</span>
+            </a>
+        </div>
+
+    </div>
+
+    <div id="welcome-modal" class="welcome-modal-container">
+        <div class="welcome-modal-content text-center">
+            <span class="close-button" id="welcome-modal-close">&times;</span>
+            <img class="w-full h-auto rounded-lg mb-4">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2"></h2>
+            <p class="text-gray-600"></p>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const backgroundImages = [
+                '1.jpg',
+                '2.jpg',
+                '3.jpg',
+            ];
+
+            const bgContainer = document.getElementById('bg-container');
+            let currentIndex = 0;
+
+            function changeBackground() {
+                bgContainer.style.backgroundImage = `url('${backgroundImages[currentIndex]}')`;
+                currentIndex = (currentIndex + 1) % backgroundImages.length;
+            }
+
+            changeBackground();
+
+            setInterval(changeBackground, 3000);
+
+            // // Welcome modal logic
+            // const welcomeModal = document.getElementById('welcome-modal');
+            // const welcomeModalClose = document.getElementById('welcome-modal-close');
+
+            //  // pop up on page load 
+            //  //commenting this out to avoid popup on every page load
+            //  const welcomeModalContent = [
+            //     {
+            //         src: '1.jpg',
+            //         title: 'Your Perfect Treat Combo!',
+            //         subtitle: 'Enjoy crispy waffles, coffee, and hot chocolate.'
+            //     },
+            //     {
+            //         src: 'pop1.jpg',
+            //         title: '🎉 Got Your Loyalty Card Yet? 🎉',
+            //         subtitle: "Sip more, earn more! 🧋 Your 5th drink is on us. Ask for a loyalty card at the billing counter NOW!!!"
+            //     },
+            //     {
+            //         src: 'pop3.jpg',
+            //         title: '🎉 BOBA + SNACKS = PERFECT COMBO! 🎉',
+            //         subtitle: 'Buy ANY 2 drinks of your choice at Easy Boba and get a FREE snack on us! 🍹🍹 + 🍟🥟🧆'
+            //     },
+            //     {
+            //         src: 'pop2.jpg',
+            //         title: '✨ Limited Time, Unlimited Flavour! ✨',
+            //         subtitle: 'Sip your favourites for just ₹99 at Easy Boba – Adajan! 🍹'
+            //     }
+            // ];
+            // const welcomeModalImage = welcomeModal.querySelector('img');
+            // const welcomeModalTitle = welcomeModal.querySelector('h2');
+            // const welcomeModalSubtitle = welcomeModal.querySelector('p');
+
+
+            // // commenting this out to avoid popup on every page load
+            
+            // window.addEventListener('load', () => { 
+            //      welcomeModal.style.display = 'flex';
+            //      changeWelcomeModalImage();
+            //      setInterval(changeWelcomeModalImage, 7000);   
+            //  });
+             
+            //  let welcomeModalIndex=0;
+
+            //   function changeWelcomeModalImage() {
+            //       const currentContent = welcomeModalContent[welcomeModalIndex];
+            //         welcomeModalImage.src = currentContent.src;
+            //         welcomeModalTitle.textContent = currentContent.title;
+            //         welcomeModalSubtitle.textContent = currentContent.subtitle;
+            //         welcomeModalIndex = (welcomeModalIndex + 1) % welcomeModalContent.length;
+            // }
+            // // Close popup
+            // welcomeModalClose.addEventListener('click', () => {
+            //     welcomeModal.style.display = 'none';
+            // });
+            
+
+        });
+    </script>
+
+</body>
+</html>
